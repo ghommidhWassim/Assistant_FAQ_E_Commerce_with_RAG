@@ -165,9 +165,18 @@ class VectorStore:
             chunked_docs = self.chunk_documents(documents)
             logger.info(f"Chunking created {len(chunked_docs)} chunks")
             
-            # Add to ChromaDB
-            self.vector_store.add_documents(chunked_docs, batch_size=100)
-            logger.info(f"Added {len(chunked_docs)} chunks to vector store")
+            # Add to ChromaDB with progress logging
+            logger.info(f"⏳ Adding {len(chunked_docs)} chunks to vector store (this may take a few seconds)...")
+            batch_size = 100
+            total_batches = (len(chunked_docs) + batch_size - 1) // batch_size
+            
+            for i in range(0, len(chunked_docs), batch_size):
+                batch = chunked_docs[i:i+batch_size]
+                batch_num = (i // batch_size) + 1
+                logger.info(f"  📤 Processing batch {batch_num}/{total_batches} ({len(batch)} chunks)...")
+                self.vector_store.add_documents(batch)
+            
+            logger.info(f"✅ Successfully added {len(chunked_docs)} chunks to vector store")
             
             return chunked_docs
             

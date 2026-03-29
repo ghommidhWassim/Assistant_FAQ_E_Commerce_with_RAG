@@ -6,7 +6,7 @@ This document provides step-by-step instructions for deploying the RAG Chatbot.
 
 - Docker 20.10+ (for containerized deployment)
 - Python 3.9+ (for local deployment)
-- Ollama with Granite model (`ollama pull granite3.3`)
+- Ollama with Granite model (`ollama pull llama3`)
 - 4GB+ RAM recommended
 - ~100MB disk space for FAISS index
 
@@ -43,7 +43,7 @@ cp your_documents.json data/
 ```bash
 # Make sure Ollama is running and model is available
 ollama serve
-# In another terminal: ollama pull granite3.3
+# In another terminal: ollama pull llama3
 ```
 
 ### Step 4: Start API
@@ -55,17 +55,23 @@ python app.py
 
 **Output:**
 ```
-[2026-03-29 12:00:00] * Running on http://0.0.0.0:5000
+Starting FastAPI app on 0.0.0.0:8000
+📚 Swagger UI available at http://0.0.0.0:8000/docs
+📖 ReDoc available at http://0.0.0.0:8000/redoc
 ```
 
 ### Step 5: Test the API
 
+**Using Swagger UI:**
+Open http://localhost:8000/docs in your browser
+
+**Using curl:**
 ```bash
 # Health check
-curl http://localhost:5000/health
+curl http://localhost:8000/health
 
 # Sample question
-curl -X POST http://localhost:5000/ask \
+curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "Quelle est la politique de retour ?"}'
 ```
@@ -87,9 +93,9 @@ docker build -f src/dockerfile -t rag-chatbot:latest .
 Create `.env` file:
 
 ```env
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-LLM_MODEL=granite3.3
+FASTAPI_HOST=0.0.0.0
+FASTAPI_PORT=8000
+LLM_MODEL=llama3
 OLLAMA_BASE_URL=http://host.docker.internal:11434
 ```
 
@@ -99,7 +105,7 @@ OLLAMA_BASE_URL=http://host.docker.internal:11434
 ```bash
 docker run -d \
   --name rag-api \
-  -p 5000:5000 \
+  -p 8000:8000 \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v $(pwd)/data:/app/data \
   -v $(pwd)/faiss_index:/app/faiss_index \
@@ -110,7 +116,7 @@ docker run -d \
 ```powershell
 docker run -d `
   --name rag-api `
-  -p 5000:5000 `
+  -p 8000:8000 `
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 `
   -v ${PWD}/data:/app/data `
   -v ${PWD}/faiss_index:/app/faiss_index `
@@ -127,7 +133,10 @@ docker ps
 docker logs rag-api
 
 # Test API from host
-curl http://localhost:5000/health
+curl http://localhost:8000/health
+
+# Access Swagger UI
+# Open http://localhost:8000/docs in your browser
 ```
 
 ### Step 5: Stop Container
@@ -152,11 +161,11 @@ services:
       context: .
       dockerfile: src/dockerfile
     ports:
-      - "5000:5000"
+      - "8000:8000"
     environment:
-      - FLASK_HOST=0.0.0.0
-      - FLASK_PORT=5000
-      - LLM_MODEL=granite3.3
+      - FASTAPI_HOST=0.0.0.0
+      - FASTAPI_PORT=8000
+      - LLM_MODEL=llama3
       - OLLAMA_BASE_URL=http://localhost:11434
     volumes:
       - ./data:/app/data
@@ -199,10 +208,13 @@ docker-compose up -d
 sleep 30
 
 # Pull model in Ollama
-docker-compose exec ollama ollama pull granite3.3
+docker-compose exec ollama ollama pull llama3
 
 # Test API
-curl http://localhost:5000/health
+curl http://localhost:8000/health
+
+# Access Swagger UI
+# Open http://localhost:8000/docs in your browser
 ```
 
 ### Step 3: Monitor
@@ -230,22 +242,21 @@ docker-compose down
 Create `.env` file with:
 
 ```env
-# Flask API
-FLASK_HOST=0.0.0.0          # API bind address
-FLASK_PORT=5000             # API port
-FLASK_DEBUG=False           # Enable debug mode
+# FastAPI
+FASTAPI_HOST=0.0.0.0          # API bind address
+FASTAPI_PORT=8000             # API port
 
 # LLM Configuration
-LLM_MODEL=granite3.3        # Model name
+LLM_MODEL=llama3          # Model name
 OLLAMA_BASE_URL=http://localhost:11434
 
 # Data paths
-DATA_DIR=data               # Documents directory
+DATA_DIR=data                  # Documents directory
 VECTOR_STORE_PATH=faiss_index
 
 # Vector store parameters
-CHUNK_SIZE=500              # Tokens per chunk
-CHUNK_OVERLAP=50            # Token overlap between chunks
+CHUNK_SIZE=500                 # Tokens per chunk
+CHUNK_OVERLAP=50               # Token overlap between chunks
 ```
 
 ---
@@ -255,7 +266,7 @@ CHUNK_OVERLAP=50            # Token overlap between chunks
 ### 1. Health Check
 
 ```bash
-curl -s http://localhost:5000/health | python -m json.tool
+curl -s http://localhost:8000/health | python -m json.tool
 ```
 
 Expected response:
@@ -263,23 +274,27 @@ Expected response:
 {
   "status": "ok",
   "message": "RAG API is running",
-  "model": "granite3.3"
+  "model": "llama3"
 }
 ```
 
 ### 2. Functional Test
 
 ```bash
-curl -s -X POST http://localhost:5000/ask \
+curl -s -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "Quelle est la politique de retour ?"}' | python -m json.tool
 ```
 
-### 3. Error Handling Test
+### 3. Access Swagger UI
+
+Open http://localhost:8000/docs in your browser to interact with the API
+
+### 4. Error Handling Test
 
 ```bash
 # Test with invalid request
-curl -X POST http://localhost:5000/ask \
+curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
   -d '{"invalid": "data"}'
 ```
@@ -358,7 +373,7 @@ python src/app.py
 ### Issue: "Slow responses"
 
 **Solutions:**
-- Use a faster model: try `mistral` instead of `granite3.3`
+- Use a faster model: try `mistral` instead of `llama3`
 - Cache FAISS locally on faster disk
 - Deploy Ollama on GPU machine
 
@@ -397,11 +412,16 @@ services:
    - Enable GPU: `CUDA_VISIBLE_DEVICES=0 ollama serve`
    - Increase `num_thread`: `ollama serve --num-thread 8`
 
-3. **Flask**
-   - Use production WSGI server:
+3. **FastAPI**
+   - Use production ASGI server with multiple workers:
+     ```bash
+     pip install uvicorn
+     uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4
+     ```
+   - Or use Gunicorn with Uvicorn workers:
      ```bash
      pip install gunicorn
-     gunicorn -w 4 -b 0.0.0.0:5000 app:app
+     gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 app:app
      ```
 
 ---
@@ -421,7 +441,7 @@ services:
 **Monthly:**
 - Add new documents: `cp new_docs.json data/`
 - Rebuild FAISS index if needed
-- Update Granite model: `ollama pull granite3.3`
+- Update Granite model: `ollama pull llama3`
 
 ---
 
@@ -429,28 +449,31 @@ services:
 
 ### Before Production
 
-- [ ] Disable debug mode: `FLASK_DEBUG=False`
-- [ ] Add authentication: API key validation
+- [ ] Use production ASGI server (not `uvicorn --reload`)
+- [ ] Add authentication: API key validation with FastAPI dependencies
 - [ ] Use HTTPS: reverse proxy with nginx/Apache
-- [ ] Rate limiting: implement with Flask-Limiter
-- [ ] Input validation: already done in app.py
+- [ ] Rate limiting: implement with `slowapi` or middleware
+- [ ] Input validation: already done with Pydantic models
 - [ ] Sanitize log output: remove sensitive data
+- [ ] Enable security headers via middleware
 
 ### Example: Rate Limiting
 
 ```python
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 limiter = Limiter(
-    app=app,
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
 )
 
-@app.route('/ask', methods=['POST'])
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+@app.post('/ask')
 @limiter.limit("5 per minute")
-def ask():
+async def ask(request: QuestionRequest):
     # ... existing code
 ```
 

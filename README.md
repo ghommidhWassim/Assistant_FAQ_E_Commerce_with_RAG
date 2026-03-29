@@ -6,7 +6,7 @@ Un chatbot RAG (Retrieval-Augmented Generation) basé sur des documents pour fou
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    CLIENT (HTTP REST)                       │
+│              CLIENT (HTTP REST + Swagger UI)                │
 └─────────────────────┬───────────────────────────────────────┘
                       │
         ┌─────────────┴──────────────┐
@@ -15,9 +15,10 @@ Un chatbot RAG (Retrieval-Augmented Generation) basé sur des documents pour fou
         └─────────────┬──────────────┘
                       │
     ┌─────────────────▼────────────────────┐
-    │      Flask REST API (app.py)         │
+    │      FastAPI REST API (app.py)       │
     │  - Input validation & error handling │
-    │  - Response formatting               │
+    │  - Auto Swagger UI documentation     │
+    │  - Response formatting with Pydantic │
     └─────────────────┬────────────────────┘
                       │
     ┌─────────────────▼─────────────────────────────────────┐

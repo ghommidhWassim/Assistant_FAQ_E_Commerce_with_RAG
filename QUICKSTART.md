@@ -23,19 +23,34 @@ python app.py
 
 Output:
 ```
- * Running on http://0.0.0.0:5000
+Starting FastAPI app on 0.0.0.0:8000
+📚 Swagger UI available at http://0.0.0.0:8000/docs
+📖 ReDoc available at http://0.0.0.0:8000/redoc
 ```
+
+## Access Swagger UI
+
+Open your browser and navigate to:
+```
+http://localhost:8000/docs
+```
+
+This interactive UI allows you to:
+- 🔍 Explore all available endpoints
+- 📝 Try requests directly from the browser
+- 📋 View request/response schemas
+- 💬 Test the `/ask` endpoint with custom questions
 
 ## Test API (Terminal 3)
 
 ### Health Check
 ```bash
-curl http://localhost:5000/health
+curl http://localhost:8000/health
 ```
 
 ### Ask a Question
 ```bash
-curl -X POST http://localhost:5000/ask \
+curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
   -d '{"question": "What is the return policy?"}'
 ```
@@ -60,4 +75,4 @@ curl -X POST http://localhost:5000/ask \
 
 ---
 
-**Done! You have a working RAG chatbot.** 🎉
+**Done! You have a working RAG chatbot with Swagger UI.** 🎉
