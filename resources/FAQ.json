@@ -1,0 +1,342 @@
+[
+  {
+    "question": "What is the return policy?",
+    "answer": "Our return policy allows returns within 30 days of purchase with receipt. Items must be in original condition."
+  },
+  {
+    "question": "How do I track my order?",
+    "answer": "You can track your order by logging into your account and viewing order history, or by using the tracking number provided in your shipping confirmation email."
+  },
+  {
+    "question": "Do you ship internationally?",
+    "answer": "Yes, we ship to over 50 countries worldwide. International shipping typically takes 7-14 business days."
+  },
+  {
+    "question": "Can I change or cancel my order?",
+    "answer": "Orders can be changed or cancelled within 2 hours of placement. After that, you'll need to wait for delivery and process a return."
+  },
+  {
+    "question": "Do you offer gift wrapping?",
+    "answer": "Yes, we offer premium gift wrapping for $5 per item. You can select this option during checkout."
+  },
+  {
+    "question": "What sizes do your clothing items come in?",
+    "answer": "Our clothing is available in sizes XS through 3XL. Each product page features a detailed size guide to help you find your perfect fit."
+  },
+  {
+    "question": "Are your products ethically sourced?",
+    "answer": "Yes, all our products are ethically sourced. We work only with manufacturers who provide fair wages and safe working conditions. Our sustainability report is updated annually."
+  },
+  {
+    "question": "Do you sell gift cards?",
+    "answer": "Yes, we offer digital gift cards in denominations from $25 to $500. Recipients receive them via email, and they're valid for one year from the date of purchase."
+  },
+  {
+    "question": "Are your products recyclable?",
+    "answer": "Most of our packaging is 100% recyclable, and we're working toward making all our products and packaging sustainably sourced and recyclable by 2025."
+  },
+  {
+    "question": "Do your electronics come with a warranty?",
+    "answer": "Yes, all our electronics come with a standard 1-year manufacturer's warranty. Extended warranties of 2 or 3 years are available for purchase during checkout."
+  },
+  {
+    "question": "How much does shipping cost?",
+    "answer": "Standard shipping is free for orders over $50. For orders under $50, shipping costs $5.99. Express shipping is available for $12.99, and overnight delivery for $24.99."
+  },
+  {
+    "question": "How long does delivery take?",
+    "answer": "Standard delivery within the continental US takes 3-5 business days. Express shipping takes 2 business days, and overnight delivery guarantees delivery by the next business day if ordered before 1 PM EST."
+  },
+  {
+    "question": "Do you ship to PO boxes?",
+    "answer": "Yes, we ship to PO boxes for standard shipping only. Express and overnight shipping require a physical address for delivery."
+  },
+  {
+    "question": "Can I change my shipping address after placing an order?",
+    "answer": "You can change your shipping address within 1 hour of placing your order. After that, please contact customer service, and we'll try to accommodate if the order hasn't been processed yet."
+  },
+  {
+    "question": "Do you offer same-day delivery?",
+    "answer": "Same-day delivery is available in select major cities for orders placed before 10 AM local time. This service has a flat fee of $29.99 and is only available for in-stock items."
+  },
+  {
+    "question": "How do I return an item?",
+    "answer": "To return an item, log into your account, go to order history, select the item you wish to return, and follow the prompts to generate a return shipping label. Pack the item securely in its original packaging if possible."
+  },
+  {
+    "question": "Who pays for return shipping?",
+    "answer": "For items being returned due to our error or defects, we cover return shipping. For preference-based returns, customers are responsible for the return shipping cost, which is deducted from the refund amount."
+  },
+  {
+    "question": "How long do refunds take to process?",
+    "answer": "Once we receive your return, we inspect the item within 2 business days. After approval, refunds typically appear in your account within 5-7 business days, depending on your payment provider."
+  },
+  {
+    "question": "Can I exchange an item instead of returning it?",
+    "answer": "Yes, exchanges are available for items of equal value. During the return process, select 'exchange' and choose the replacement item. If there's a price difference, your payment method will be charged or refunded accordingly."
+  },
+  {
+    "question": "What items cannot be returned?",
+    "answer": "Personalized items, intimate apparel, food products, downloadable software, and items marked as final sale cannot be returned. Additionally, items returned in non-original condition may be subject to a restocking fee."
+  },
+  {
+    "question": "What payment methods do you accept?",
+    "answer": "We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, Shop Pay, and our store credit card. Gift cards can also be used as payment."
+  },
+  {
+    "question": "Do you offer financing options?",
+    "answer": "Yes, we offer financing through our partner Affirm for purchases over $100. You can select this option at checkout to see if you qualify for 3, 6, or 12-month financing plans."
+  },
+  {
+    "question": "When is my credit card charged?",
+    "answer": "Your credit card is authorized when you place your order but is only charged when your order ships. For pre-orders or backordered items, you'll be charged when the item ships."
+  },
+  {
+    "question": "Do you price match?",
+    "answer": "Yes, we offer price matching for identical items sold by major retailers. Submit your price match request within 14 days of purchase with proof of the competitor's current price."
+  },
+  {
+    "question": "Do you offer military or student discounts?",
+    "answer": "Yes, we offer a 10% discount for active military personnel, veterans, and students with valid ID. This discount can be verified and applied during the checkout process through our identity verification partner."
+  },
+  {
+    "question": "How do I create an account?",
+    "answer": "To create an account, click on 'Sign In' at the top of our website, then select 'Create Account.' You'll need to provide your email address, create a password, and fill in your shipping information."
+  },
+  {
+    "question": "How do I reset my password?",
+    "answer": "To reset your password, click on 'Sign In', then 'Forgot Password', and enter your email address. We'll send you a link to create a new password. This link expires after 24 hours for security purposes."
+  },
+  {
+    "question": "Can I have multiple shipping addresses in my account?",
+    "answer": "Yes, you can save multiple shipping addresses in your account. Go to 'My Account', select 'Addresses', and you can add, edit, or delete shipping addresses as needed."
+  },
+  {
+    "question": "How do I update my email preferences?",
+    "answer": "To update email preferences, log into your account, go to 'Communication Preferences', and select which types of emails you'd like to receive. You can opt in or out of promotions, order updates, and product recommendations."
+  },
+  {
+    "question": "Can I delete my account?",
+    "answer": "Yes, you can request account deletion by going to 'My Account', selecting 'Privacy Settings', and clicking 'Delete My Account'. This permanently removes all your personal information from our systems within 30 days."
+  },
+  {
+    "question": "How can I tell if an item is in stock?",
+    "answer": "Each product page displays stock status. If an item is available, you'll see 'In Stock' with estimated shipping times. For limited stock, you'll see the specific quantity remaining. Out-of-stock items show 'Currently Unavailable' or 'Coming Soon'."
+  },
+  {
+    "question": "Can I be notified when an out-of-stock item is available?",
+    "answer": "Yes, on any out-of-stock product page, click 'Notify Me When Available' and enter your email address. You'll receive an automatic notification when the item is back in stock."
+  },
+  {
+    "question": "How do pre-orders work?",
+    "answer": "Pre-orders allow you to purchase upcoming items before they're released. Your payment method is authorized but not charged until the item ships. Each pre-order product page lists the estimated release date."
+  },
+  {
+    "question": "Can I cancel a pre-order?",
+    "answer": "Yes, pre-orders can be cancelled anytime before they ship by contacting customer service or through your account under 'Order History'. There's no penalty for cancelling a pre-order."
+  },
+  {
+    "question": "Do you have physical store locations?",
+    "answer": "We have flagship stores in New York, Los Angeles, Chicago, and Miami. Our website features a store locator with addresses, hours of operation, and services available at each location."
+  },
+  {
+    "question": "What are your customer service hours?",
+    "answer": "Our customer service team is available Monday through Friday from 8 AM to 11 PM EST, and Saturday through Sunday from 9 AM to 8 PM EST. During holiday seasons, we extend these hours."
+  },
+  {
+    "question": "How can I contact customer support?",
+    "answer": "You can reach our customer support team via live chat on our website, by email at support@ourstore.com, or by phone at 1-800-555-0123. For order-specific questions, please have your order number ready."
+  },
+  {
+    "question": "Do you have an automated chatbot?",
+    "answer": "Yes, our website features an AI chatbot for immediate assistance with common questions. For complex issues, the chatbot will connect you with a human customer service representative."
+  },
+  {
+    "question": "How do I check the status of my support ticket?",
+    "answer": "To check your support ticket status, log into your account and go to 'Support History'. There you'll see all current and past tickets with their statuses and any responses from our team."
+  },
+  {
+    "question": "Do you offer support in languages other than English?",
+    "answer": "Yes, we offer customer support in English, Spanish, French, and German. When contacting us, you can request your preferred language, and we'll connect you with an appropriate team member."
+  },
+  {
+    "question": "How does your loyalty program work?",
+    "answer": "Our loyalty program awards 1 point for every dollar spent. Points can be redeemed for discounts, free shipping, or exclusive products. There are four membership tiers based on annual spending, each with increasing benefits."
+  },
+  {
+    "question": "How do I join your loyalty program?",
+    "answer": "You can join our loyalty program for free by clicking 'Join Rewards' in your account dashboard. New customers are automatically enrolled when creating an account if they opt in during registration."
+  },
+  {
+    "question": "Do loyalty points expire?",
+    "answer": "Loyalty points expire after 12 months of account inactivity. As long as you make at least one purchase or point redemption per year, your points will remain valid."
+  },
+  {
+    "question": "How do I check my loyalty point balance?",
+    "answer": "Your loyalty point balance is displayed in your account dashboard. You can also see a detailed history of how points were earned and spent under the 'Rewards History' section."
+  },
+  {
+    "question": "Can I transfer my loyalty points to someone else?",
+    "answer": "Loyalty points cannot be transferred between accounts. However, you can use your points to purchase a gift card, which can then be given to someone else."
+  },
+  {
+    "question": "How do you protect my personal information?",
+    "answer": "We protect your personal information using industry-standard encryption for data transmission and storage. We also employ multi-factor authentication, regular security audits, and strict access controls for our systems."
+  },
+  {
+    "question": "Is it safe to save my credit card on your website?",
+    "answer": "Yes, we use tokenization to store payment information, which means your actual credit card number is never stored on our servers. All payment processing is handled by PCI-DSS compliant payment processors."
+  },
+  {
+    "question": "How can I recognize phishing emails claiming to be from your company?",
+    "answer": "Legitimate emails from us will always address you by your name, never ask for your password, and come from our domain '@ourstore.com'. If you're unsure, don't click any links and forward suspicious emails to security@ourstore.com."
+  },
+  {
+    "question": "What is your privacy policy?",
+    "answer": "Our privacy policy outlines how we collect, use, and protect your information. We never sell your personal data to third parties. The complete privacy policy is available on our website footer."
+  },
+  {
+    "question": "Do you use cookies on your website?",
+    "answer": "Yes, we use cookies to improve your browsing experience, remember your preferences, and provide personalized recommendations. You can manage cookie preferences through the Cookie Settings link in our website footer."
+  },
+  {
+    "question": "Do you have a mobile app?",
+    "answer": "Yes, our mobile app is available for free download on both iOS and Android devices. The app offers exclusive mobile-only deals, easier checkout, and the ability to scan products in-store for additional information."
+  },
+  {
+    "question": "How do I download your mobile app?",
+    "answer": "You can download our mobile app from the Apple App Store for iOS devices or Google Play Store for Android devices. Search for 'Our Store' or scan the QR code on our website's app page."
+  },
+  {
+    "question": "Can I use the same account on your website and mobile app?",
+    "answer": "Yes, your account credentials work across our website and mobile app. Your cart, wishlist, and account information automatically sync between platforms."
+  },
+  {
+    "question": "Does your mobile app work offline?",
+    "answer": "Our app has limited offline functionality. You can view previously loaded products and your wishlist offline, but searching, browsing new items, and completing purchases require an internet connection."
+  },
+  {
+    "question": "Why should I use your app instead of the website?",
+    "answer": "Our app offers enhanced features like push notifications for order updates, a barcode scanner for in-store price checks, augmented reality product visualization, and exclusive app-only discounts and flash sales."
+  },
+  {
+    "question": "Do you offer product customization?",
+    "answer": "Yes, select products can be customized with monograms, engraving, or color options. Products eligible for customization display a 'Customize' button on their product page."
+  },
+  {
+    "question": "How long do customized products take to ship?",
+    "answer": "Customized products require additional processing time of 2-5 business days before shipping, depending on the type of customization. The estimated delivery timeframe will be shown during checkout."
+  },
+  {
+    "question": "Can customized products be returned?",
+    "answer": "Customized products cannot be returned unless there is a manufacturing defect. Please review your customization choices carefully before confirming your order."
+  },
+  {
+    "question": "Is there an extra charge for customization?",
+    "answer": "Basic customization options like color choice are free, while premium customizations like monogramming ($8), engraving ($12), or custom sizing ($15) incur additional charges shown during the customization process."
+  },
+  {
+    "question": "Can I see a preview of my customized product?",
+    "answer": "Yes, our customization tool provides a digital preview of your product with selected customizations before you complete your purchase. For certain items, 360-degree views are available."
+  },
+  {
+    "question": "How do I use the wishlist feature?",
+    "answer": "To add an item to your wishlist, click the heart icon on any product page or quick view. You can view your wishlist by clicking the heart icon in the navigation bar. You must have an account to use the wishlist feature."
+  },
+  {
+    "question": "Can I save my shopping cart for later?",
+    "answer": "Yes, if you're logged into your account, your shopping cart is automatically saved. You can return later to complete your purchase from any device. Carts are typically saved for 30 days."
+  },
+  {
+    "question": "How do I use filters when shopping?",
+    "answer": "On category pages, you'll find filter options in the sidebar or top menu. You can filter by price range, color, size, brand, customer rating, and other attributes specific to the product category."
+  },
+  {
+    "question": "Can I compare different products side by side?",
+    "answer": "Yes, you can compare up to 4 products side by side. On product pages, click 'Add to Compare', then click the compare icon in the top navigation to see a detailed comparison chart of selected items."
+  },
+  {
+    "question": "How accurate are your product recommendations?",
+    "answer": "Our product recommendations are generated using your browsing history, past purchases, and items popular with customers who bought similar products. The more you interact with our site, the more personalized these recommendations become."
+  },
+  {
+    "question": "Do you offer wholesale pricing?",
+    "answer": "Yes, we offer wholesale pricing for qualified businesses. To apply for a wholesale account, visit the 'Wholesale' link in our footer and complete the application form with your business information and tax ID."
+  },
+  {
+    "question": "What is your minimum order quantity for wholesale?",
+    "answer": "Our minimum initial wholesale order is $500, with subsequent orders requiring a $300 minimum. Volume discounts are available for orders exceeding $1,000, $2,500, and $5,000."
+  },
+  {
+    "question": "Do you offer corporate gifting services?",
+    "answer": "Yes, our corporate gifting program offers volume discounts, custom branding options, and consolidated shipping. Our corporate gift specialists can help you select appropriate items for any occasion or budget."
+  },
+  {
+    "question": "Can I get a tax exemption for my business purchase?",
+    "answer": "Yes, qualified tax-exempt organizations can submit their tax exemption certificate during the wholesale application process or by uploading it to their business account. Once verified, tax will be automatically removed from future orders."
+  },
+  {
+    "question": "Do you offer dropshipping services?",
+    "answer": "Yes, we offer dropshipping services for approved reseller partners. Our dropshipping program includes blind shipping with your branding, automated inventory updates, and API integration options for seamless order processing."
+  },
+  {
+    "question": "What sustainability initiatives do you have?",
+    "answer": "Our sustainability initiatives include carbon-neutral shipping, recycled packaging materials, a commitment to reduce plastic usage by 75% by 2025, and partnership with environmental organizations to offset our carbon footprint."
+  },
+  {
+    "question": "Do you have a recycling program?",
+    "answer": "Yes, we offer a product recycling program where customers can return used items from our brand for proper recycling. For each item recycled, customers receive a 10% discount on their next purchase of a similar item."
+  },
+  {
+    "question": "What charitable organizations do you support?",
+    "answer": "We donate 1% of all sales to environmental conservation efforts through our partnership with 1% for the Planet. Additionally, we support local charities in communities where our facilities are located."
+  },
+  {
+    "question": "Are your products tested on animals?",
+    "answer": "No, none of our products or ingredients are tested on animals. We are certified cruelty-free by Leaping Bunny and PETA. We also require our suppliers to adhere to cruelty-free standards."
+  },
+  {
+    "question": "What are your labor standards for manufacturing?",
+    "answer": "All our manufacturing partners must adhere to our Code of Conduct, which requires fair wages, safe working conditions, reasonable working hours, and prohibits child labor. We conduct regular audits to ensure compliance."
+  },
+  {
+    "question": "When do your seasonal sales occur?",
+    "answer": "Our major seasonal sales occur during Black Friday/Cyber Monday (November), End-of-Season (January and July), Anniversary Sale (April), and Back to School (August). Subscribers to our newsletter receive early access to these sales."
+  },
+  {
+    "question": "Do you offer holiday gift guides?",
+    "answer": "Yes, we publish comprehensive gift guides for major holidays including Christmas, Valentine's Day, Mother's Day, and Father's Day. These guides feature curated collections by price point and recipient type."
+  },
+  {
+    "question": "How early should I order for Christmas delivery?",
+    "answer": "For standard shipping, place orders by December 15th to ensure Christmas delivery. For express shipping, the deadline is December 20th. These dates may vary for international shipping or during periods of high demand."
+  },
+  {
+    "question": "Do you offer special birthday discounts?",
+    "answer": "Yes, loyalty program members receive a 15% discount code during their birthday month. To ensure you receive this offer, make sure your birth date is correctly entered in your account profile."
+  },
+  {
+    "question": "Do you participate in Black Friday?",
+    "answer": "Yes, Black Friday is our biggest sale of the year. We offer doorbusters, tiered discounts based on purchase amount, and special limited-quantity flash deals throughout the day both online and in-store."
+  },
+  {
+    "question": "Why isn't your website working properly on my browser?",
+    "answer": "Our website is optimized for the latest versions of Chrome, Safari, Firefox, and Edge. If you're experiencing issues, try updating your browser, clearing your cache, or disabling extensions that might interfere with site functionality."
+  },
+  {
+    "question": "The product image isn't loading. What should I do?",
+    "answer": "If product images aren't loading, try refreshing the page or clearing your browser cache. If the issue persists, it could be due to a slow internet connection or temporary server issues on our end."
+  },
+  {
+    "question": "I can't complete my purchase. What's wrong?",
+    "answer": "If you're having trouble completing your purchase, first check that your payment information is entered correctly. Common issues include expired credit cards, insufficient funds, or billing address mismatches. If problems persist, try a different payment method or contact customer support."
+  },
+  {
+    "question": "Why am I not receiving your emails?",
+    "answer": "If you're not receiving our emails, first check your spam or promotions folder. Make sure you've added our email address to your contacts list. You can also verify your email subscription status in your account preferences."
+  },
+  {
+    "question": "How do I enable notifications from your website?",
+    "answer": "To enable browser notifications, click 'Allow' when prompted during your visit. On mobile devices, you can manage notification preferences in your browser settings or device settings. These notifications will alert you about restocked items, promotions, and order updates."
+  }
+]
