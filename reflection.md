@@ -4,7 +4,7 @@ Le prompt a été conçu pour contraindre fortement le modèle afin d’éviter 
 
 ## Ce que je ferais différemment avec plus de temps
 
-Avec plus de temps, j’améliorerais la qualité du retrieval en utilisant un reranker pour mieux filtrer les documents pertinents. j'optimiserais le module d'evaluation pour le moment l'execution ce crush et utiliser d'autres métriques. Enfin, j’optimiserais le prompt avec des techniques comme few-shot prompting ou autre pour améliorer la robustesse.
+Avec plus de temps, j’améliorerais la qualité du retrieval en utilisant un reranker afin de mieux filtrer les documents pertinents. J’optimiserais également le module d’évaluation, car pour le moment l’exécution échoue, et j’intégrerais d’autres métriques pour une analyse plus complète. Enfin, j’ajouterais une interface de chat dynamique permettant de discuter avec l’agent, d’importer des documents et d’échanger directement à leur sujet.
 
 ## Limitation identifiée du système actuel
 le système repose uniquement sur une similarité vectorielle simple, ce qui peut récupérer du contexte peu pertinent.
