@@ -32,7 +32,7 @@ echo "3️⃣ Testing Invalid Request (missing question)"
 echo "─────────────────────────────────────────────"
 curl -s -X POST "$API_BASE/ask" \
   -H "Content-Type: application/json" \
-  -d '{}' | python3 -m json.tool
+  -d '{ "question": "How to cook pasta?" }' | python3 -m json.tool
 echo ""
 
 echo "4️⃣ Accessing Swagger UI"

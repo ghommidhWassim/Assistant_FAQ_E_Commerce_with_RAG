@@ -1,303 +1,242 @@
 # RAG Chatbot — E-commerce Support Assistant
 
-Un chatbot RAG (Retrieval-Augmented Generation) basé sur des documents pour fournir des réponses précises et sourcées aux questions e-commerce. Le système combine la récupération sémantique de documents avec la génération LLM pour garantir des réponses fidèles à la source.
+A RAG (Retrieval-Augmented Generation) chatbot for accurate, source-backed e-commerce Q&A. Combines semantic document retrieval with Ollama's llama3 model to provide faithful, contextualized answers.
 
-## 📋 Architecture
+## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│              CLIENT (HTTP REST + Swagger UI)                │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-        ┌─────────────┴──────────────┐
-        │   POST /ask                │
-        │   GET /health              │
-        └─────────────┬──────────────┘
-                      │
-    ┌─────────────────▼────────────────────┐
-    │      FastAPI REST API (app.py)       │
-    │  - Input validation & error handling │
-    │  - Auto Swagger UI documentation     │
-    │  - Response formatting with Pydantic │
-    └─────────────────┬────────────────────┘
-                      │
-    ┌─────────────────▼─────────────────────────────────────┐
-    │         LLM RAG Handler (llm_rag.py)                  │
-    │  ┌────────────────────────────────────────────────┐   │
-    │  │ 1. Document Retrieval (Semantic Search)       │   │
-    │  │    - Query embedding via Ollama               │   │
-    │  │    - FAISS similarity search (k=5)            │   │
-    │  ├────────────────────────────────────────────────┤   │
-    │  │ 2. Prompt Engineering (Chain-of-Thought)      │   │
-    │  │    - System prompt with French instructions   │   │
-    │  │    - Context formatting with sources          │   │
-    │  │    - Guardrails for out-of-scope questions    │   │
-    │  ├────────────────────────────────────────────────┤   │
-    │  │ 3. LLM Inference (Granite via Ollama)         │   │
-    │  │    - Generate contextualized response         │   │
-    │  │    - Chain-of-thought reasoning               │   │
-    │  ├────────────────────────────────────────────────┤   │
-    │  │ 4. Post-Processing                            │   │
-    │  │    - Source extraction & citation             │   │
-    │  │    - Coverage assessment                      │   │
-    │  │    - Confidence scoring                       │   │
-    │  └────────────────────────────────────────────────┘   │
-    └─────────────────┬─────────────────────────────────────┘
-                      │
-    ┌─────────────────▼─────────────────────────────────────┐
-    │        Vector Store & Data Layer                      │
-    │  ┌────────────────────────────────────────────────┐   │
-    │  │ FAISS Vector Store (vector_store.py)          │   │
-    │  │  - Persistent index (faiss_index/)            │   │
-    │  │  - Embedding generation (Ollama)              │   │
-    │  │  - Chunk similarity search                    │   │
-    │  └────────────────────────────────────────────────┘   │
-    │  ┌────────────────────────────────────────────────┐   │
-    │  │ Document Processing                           │   │
-    │  │  - PDF parsing (PyPDF)                        │   │
-    │  │  - Text chunking (RecursiveCharacterSplitter) │   │
-    │  │  - Metadata tracking                          │   │
-    │  └────────────────────────────────────────────────┘   │
-    └─────────────────┬─────────────────────────────────────┘
-                      │
-        ┌─────────────┴──────────────────────┐
-        │  Data Sources (data/)              │
-        │  - FAQ.json                        │
-        │  - Ecommerce_FAQ_dataset.json      │
-        └────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│   Client (HTTP REST + Swagger UI)   │
+└────────────────┬────────────────────┘
+                 │
+        ┌────────┴────────┐
+        │  POST /ask      │
+        │  GET /health    │
+        └────────┬────────┘
+                 │
+    ┌────────────▼──────────────┐
+    │  FastAPI (app.py)         │
+    │  - Input validation       │
+    │  - Swagger UI docs        │
+    │  - Pydantic responses     │
+    └────────────┬──────────────┘
+                 │
+    ┌────────────▼─────────────────────┐
+    │  RAG Handler (llm_rag.py)        │
+    │  1. Semantic search (FAISS)      │
+    │  2. Prompt engineering           │
+    │  3. LLM inference (llama3)       │
+    │  4. Post-processing              │
+    └────────────┬─────────────────────┘
+                 │
+    ┌────────────▼─────────────────────┐
+    │  Vector Store (vector_store.py)  │
+    │  - ChromaDB indexing             │
+    │  - Document chunking             │
+    │  - Embeddings (Ollama)           │
+    └────────────┬─────────────────────┘
+                 │
+        ┌────────┴─────────────┐
+        │  data/               │
+        │  - FAQ.json          │
+        │  - Dataset.json      │
+        └──────────────────────┘
 ```
 
-## 🎯 Composants Principaux
+## 🎯 Key Components
 
 ### 1. **Document Ingestion** (`vector_store.py`)
-- Chargement de fichiers PDF, JSON, texte
-- Découpage cohérent en chunks (500 tokens, chevauchement 50)
-- Extraction des métadonnées (source, page)
+- Loads JSON, PDF, and text files
+- Chunks with 500 token size, 50 token overlap
+- Preserves source metadata
 
-### 2. **Vectorisation** (`vector_store.py`)
-- Génération d'embeddings via **Ollama (Granite)**
-- Indexation persistante en **FAISS**
-- Recherche rapide par similarité sémantique
+### 2. **Vectorization** (`vector_store.py`)
+- Embeddings via Ollama (llama3)
+- ChromaDB persistent indexing
+- Semantic similarity search
 
-### 3. **Retrieval Contextuel** (`vector_store.py`)
-- Requête utilisateur → embedding
-- Récupération des k=5 chunks les plus pertinents
-- Formatage avec métadonnées de source
+### 3. **Retrieval** (`vector_store.py`)
+- Query embedding
+- Top-5 chunk retrieval
+- Formatted with source metadata
 
-### 4. **Génération Augmentée** (`llm_rag.py`)
-- **System Prompt** en français avec instructions strictes
-- **Chain-of-Thought** reasoning explicite
-- **Source Citation** obligatoire
-- **Guardrails** pour les questions hors scope
+### 4. **Generation** (`llm_rag.py`)
+- System prompt with French instructions
+- Chain-of-thought reasoning
+- Source citation requirement
+- Out-of-scope guardrails
 
-### 5. **API & Exposition** (`app.py`)
-- **POST /ask** : soumettre une question
-- **GET /health** : vérifier le statut
-- Gestion complète des erreurs
-- Validation des requêtes
+### 5. **API** (`app.py`)
+- `POST /ask` - Submit questions
+- `GET /health` - Status check
+- Error handling
+- Pydantic validation
 
-## 🚀 Setup Rapide (< 3 minutes)
+## 🚀 Quick Start
 
-### Prérequis
-- Python 3.9+
-- Ollama installé et recevant les modèles (`ollama pull granite3.3`)
-- Ollama lancé (`ollama serve`)
+### Local Deployment
 
-### Installation
-
-**1. Cloner et configuration**
+**1. Setup**
 ```bash
-cd rag_chatbot
-cp .env.example .env
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-**2. Lancer l'API**
+**2. Start Ollama** (separate terminal)
+```bash
+ollama serve
+# In another terminal:
+ollama pull llama3
+```
+
+**3. Start API**
 ```bash
 cd src
 python app.py
 ```
 
-L'API sera disponible sur `http://localhost:5000`
+Access at: **http://localhost:8000/docs**
 
-### Via Docker
+### Docker Deployment
 
+**1. Start services**
 ```bash
-# Build l'image
-docker build -f src/dockerfile -t rag-chatbot .
-
-# Lancer le conteneur
-docker run -p 5000:5000 \
-  -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
-  -v $(pwd)/data:/app/data \
-  -v $(pwd)/faiss_index:/app/faiss_index \
-  rag-chatbot
+docker-compose up -d
+sleep 10
+docker-compose exec ollama ollama pull llama3
 ```
 
-## 📡 Utilisation de l'API
+**2. Access**
+- Swagger UI: http://localhost:8000/docs
+- Health: `curl http://localhost:8000/health`
+- Ask: `curl -X POST http://localhost:8000/ask ...`
 
-### 1. Vérifier le statut
+See [DEPLOYMENT.md](DEPLOYMENT.md) for details.
+
+## 📡 API Usage
+
+### Health Check
 ```bash
-curl -X GET http://localhost:5000/health
+curl http://localhost:8000/health
 ```
 
-**Réponse:**
+Response:
 ```json
 {
   "status": "ok",
   "message": "RAG API is running",
-  "model": "granite3.3"
+  "model": "llama3"
 }
 ```
 
-### 2. Poser une question
+### Ask a Question
 ```bash
-curl -X POST http://localhost:5000/ask \
+curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "Quelle est la politique de retour ?"}'
+  -d '{"question": "What is your return policy?"}'
 ```
 
-**Réponse:**
+Response:
 ```json
 {
-  "answer": "La politique de retour est de 30 jours pour tout produit non endommagé avec le reçu original...",
+  "answer": "Returns accepted within 30 days with original receipt...",
   "sources": ["FAQ.json", "Ecommerce_FAQ_dataset.json"],
   "confidence": "high",
   "coverage": "complete"
 }
 ```
 
-### 3. Question hors contexte
+### Out-of-Scope Question
 ```bash
-curl -X POST http://localhost:5000/ask \
+curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "Quel est le meilleur restaurant à Paris ?"}'
+  -d '{"question": "How do I make a chocolate cake?"}'
 ```
 
-**Réponse (404):**
-```json
-{
-  "error": "Cette question n'est pas couverte par les documents disponibles...",
-  "coverage": "not_available"
-}
-```
+Response: Question not covered by available documents.
 
-## 🔧 Choix Techniques Justifiés
+## 🛠️ Tech Stack
 
-| Composant | Choix | Justification |
-|-----------|-------|---------------|
-| **LLM** | Granite 3.3 via Ollama | Exécution locale, aucune donnée externe, latence faible, gratuit |
-| **Vector Store** | FAISS | Haut performance, léger, persistant, parfait pour <1M documents |
-| **Embeddings** | Ollama (Granite) | Cohérence avec le même modèle, pas de dépendance externe |
-| **Framework Web** | Flask | Léger, simple, idéal pour MVP et APIs REST |
-| **Chunking** | RecursiveCharacterSplitter | Préserve couches de sens, évite fragmentations aléatoires |
-| **Langage** | Français dans système prompt | Qualité de réponse + tonalité professionnelle |
+| Component | Choice | Why |
+|-----------|--------|-----|
+| **LLM** | llama3 (Ollama) | Local execution, no data leakage, fast, free |
+| **Vector Store** | ChromaDB | Built-in persistence, semantic search, lightweight |
+| **Embeddings** | Ollama (llama3) | Same model, no external deps |
+| **API Framework** | FastAPI | Modern, automatic docs, validation |
+| **Chunking** | RecursiveCharacterSplitter | Preserves semantic structure |
 
-## 📊 Exemple de Flux Complet
-
-1. **Entrée utilisateur:**
-   ```
-   "Ai-je droit à une garantie sur les articles électroniques ?"
-   ```
-
-2. **Étape 1 — Retrieval:**
-   - Embedding de la question
-   - Recherche FAISS des 5 chunks proches
-   - Récupération: ["FAQ.json: garantie", "conditions_generales.txt: électronique"]
-
-3. **Étape 2 — Prompt Construction:**
-   ```
-   Système: [Instructions strictes + français + sources]
-   Contexte: [5 chunks avec métadonnées]
-   Question: [question utilisateur]
-   ```
-
-4. **Étape 3 — LLM Inference:**
-   - Granite génère réponse + sources en français
-   - Chain-of-thought explicite
-
-5. **Étape 4 — Post-Processing:**
-   - Extraction sources → ["FAQ.json", "conditions_generales.txt"]
-   - Couverture → "complete" (réponse exhaustive trouvée)
-   - Confiance → "high" (5 docs pertinents)
-
-6. **Réponse API:**
-   ```json
-   {
-     "answer": "Oui, les articles électroniques bénéficient d'une garantie de 2 ans...",
-     "sources": ["FAQ.json", "conditions_generales.txt"],
-     "confidence": "high",
-     "coverage": "complete"
-   }
-   ```
-
-## 📂 Structure Projet
+## 📂 Project Structure
 
 ```
 rag_chatbot/
 ├── src/
-│   ├── app.py                          # API Flask (endpoints /ask, /health)
-│   ├── llm_rag.py                      # Orchestration RAG + Prompting
-│   ├── vector_store.py                 # Gestion FAISS + Documents
-│   ├── conversation.py                 # Persistance historique (bonus)
-│   └── dockerfile                      # Docker packaging
-├── data/                               # Documents corpus
+│   ├── app.py                  # FastAPI endpoints
+│   ├── llm_rag.py              # RAG orchestration
+│   ├── vector_store.py         # chromaDB + document processing
+│   ├── conversation.py         # Chat history (optional)
+│   └── dockerfile              # Docker image
+├── data/                       # Document corpus
 │   ├── FAQ.json
 │   └── Ecommerce_FAQ_dataset.json
-├── data_sources.md                     # Métadonnées sources (requis)
-├── reflection.md                       # Justifications prompting (requis)
-├── eval/                               # Tests d'évaluation (bonus)
+├── eval/                       # Evaluation tools
 │   └── evaluation.py
-├── requirements.txt                    # Dépendances Python
-├── .env.example                        # Template configuration
-├── README.md                           # Ce fichier
-└── LICENSE                             # MIT
+├── docker-compose.yml          # Container setup
+├── DEPLOYMENT.md               # Deployment guide
+├── requirements.txt            # Python dependencies
+├── README.md                   # This file
+└── LICENSE                     # MIT
 ```
 
-## ⚙️ Configuration Avancée
+## 📊 Example Flow
 
-### Variables Environnement (.env)
-```env
-# API
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-FLASK_DEBUG=False
+**Input:** "Do I get a warranty on electronics?"
 
-# LLM
-LLM_MODEL=granite3.3
-OLLAMA_BASE_URL=http://localhost:11434
+**Step 1 - Retrieval:**
+- Embed question via Ollama
+- ChromaDB search returns top 5 chunks
+- Found: FAQ.json, conditions.json
 
-# Data
-DATA_DIR=data
-VECTOR_STORE_PATH=faiss_index
-CHUNK_SIZE=500          # tokens par chunk
-CHUNK_OVERLAP=50        # chevauchement
+**Step 2 - Prompt:**
+```
+System: [French instructions + source guidelines]
+Context: [Retrieved chunks with metadata]
+Question: [User question]
 ```
 
-## 🧪 Tests
+**Step 3 - Generation:**
+- llama3 generates answer in French
+- Includes sources and reasoning
 
-### Requête valide - Question couverte
+**Step 4 - Post-Processing:**
+- Extract sources
+- Assess coverage (complete/partial/none)
+- Confidence score
+
+**Output:**
+```json
+{
+  "answer": "Yes, electronics have 2-year warranty...",
+  "sources": ["FAQ.json", "conditions.json"],
+  "confidence": "high",
+  "coverage": "complete"
+}
+```
+
+## 🧪 Testing
+
+**See** [eval/README.md](eval/README.md) **for evaluation tools.**
+
+Run quality checks on RAG outputs using RAGAS metrics:
 ```bash
-curl -X POST http://localhost:5000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Quel est le délai de livraison standard ?"}'
+python eval/evaluation.py --create-sample
+python eval/evaluation.py
 ```
-
-### Requête invalide - Question vide
-```bash
-curl -X POST http://localhost:5000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": ""}'
-```
-→ Erreur 400: "Question cannot be empty"
-
-### Requête hors contexte
-```bash
-curl -X POST http://localhost:5000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Comment faire un gâteau au chocolat ?"}'
-```
-→ Erreur 404: "Cette question n'est pas couverte..."
 
 ## 📄 License
+
 MIT License. See LICENSE for details.
+
+---
+
+**Stack:** FastAPI • Ollama (llama3) • FAISS • LangChain • Docker

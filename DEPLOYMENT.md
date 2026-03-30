@@ -1,28 +1,22 @@
 # Deployment Guide
 
-This document provides step-by-step instructions for deploying the RAG Chatbot.
+Simple deployment instructions for the RAG Chatbot with Ollama (llama3) and FAISS.
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Docker 20.10+ (for containerized deployment)
 - Python 3.9+ (for local deployment)
-- Ollama with Granite model (`ollama pull llama3`)
-- 4GB+ RAM recommended
-- ~100MB disk space for FAISS index
+- Docker & Docker Compose (for containerized deployment)
+- Ollama installed locally (for local deployment)
+- 4GB+ RAM
 
 ---
 
-## 🚀 Option 1: Local Deployment
+## Local Deployment
 
-### Step 1: Setup Environment
+### 1. Setup Environment
 
 ```bash
-cd rag_chatbot
-
-# Copy environment template
-cp .env.example .env
-
-# Create Python virtual environment
+# Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
@@ -30,463 +24,70 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Step 2: Install Data
+### 2. Start Ollama (in a separate terminal)
 
 ```bash
-# Data is pre-installed in data/ directory
-# Add new documents as needed:
-cp your_documents.json data/
-```
-
-### Step 3: Start Ollama (in separate terminal)
-
-```bash
-# Make sure Ollama is running and model is available
 ollama serve
-# In another terminal: ollama pull llama3
 ```
 
-### Step 4: Start API
+In another terminal, pull the model:
+```bash
+ollama pull llama3
+```
+
+### 3. Start the API
 
 ```bash
 cd src
 python app.py
 ```
 
-**Output:**
-```
-Starting FastAPI app on 0.0.0.0:8000
-📚 Swagger UI available at http://0.0.0.0:8000/docs
-📖 ReDoc available at http://0.0.0.0:8000/redoc
-```
+The API will start at `http://localhost:8000`
 
-### Step 5: Test the API
+### 4. Access the Application
 
-**Using Swagger UI:**
-Open http://localhost:8000/docs in your browser
-
-**Using curl:**
-```bash
-# Health check
-curl http://localhost:8000/health
-
-# Sample question
-curl -X POST http://localhost:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Quelle est la politique de retour ?"}'
-```
+- **Swagger UI**: http://localhost:8000/docs
+- **Health Check**: `curl http://localhost:8000/health`
+- **Ask a Question**:
+  ```bash
+  curl -X POST http://localhost:8000/ask \
+    -H "Content-Type: application/json" \
+    -d '{"question": "What is your return policy?"}'
+  ```
 
 ---
 
-## 🐳 Option 2: Docker Deployment
+## Docker Deployment
 
-### Step 1: Build Docker Image
-
-From project root:
+### 1. Build the Image
 
 ```bash
 docker build -f src/dockerfile -t rag-chatbot:latest .
 ```
 
-### Step 2: Configure Environment
 
-Create `.env` file:
 
-```env
-FASTAPI_HOST=0.0.0.0
-FASTAPI_PORT=8000
-LLM_MODEL=llama3
-OLLAMA_BASE_URL=http://host.docker.internal:11434
-```
-
-### Step 3: Run Container
-
-**Linux/Mac:**
-```bash
-docker run -d \
-  --name rag-api \
-  -p 8000:8000 \
-  -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
-  -v $(pwd)/data:/app/data \
-  -v $(pwd)/faiss_index:/app/faiss_index \
-  rag-chatbot:latest
-```
-
-**Windows (PowerShell):**
-```powershell
-docker run -d `
-  --name rag-api `
-  -p 8000:8000 `
-  -e OLLAMA_BASE_URL=http://host.docker.internal:11434 `
-  -v ${PWD}/data:/app/data `
-  -v ${PWD}/faiss_index:/app/faiss_index `
-  rag-chatbot:latest
-```
-
-### Step 4: Verify Container
-
-```bash
-# Check running containers
-docker ps
-
-# Check logs
-docker logs rag-api
-
-# Test API from host
-curl http://localhost:8000/health
-
-# Access Swagger UI
-# Open http://localhost:8000/docs in your browser
-```
-
-### Step 5: Stop Container
-
-```bash
-docker stop rag-api
-docker rm rag-api
-```
-
----
-
-## 🚢 Option 3: Docker Compose Deployment
-
-### Step 1: Create docker-compose.yml
-
-```yaml
-version: '3.8'
-
-services:
-  rag-api:
-    build:
-      context: .
-      dockerfile: src/dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      - FASTAPI_HOST=0.0.0.0
-      - FASTAPI_PORT=8000
-      - LLM_MODEL=llama3
-      - OLLAMA_BASE_URL=http://localhost:11434
-    volumes:
-      - ./data:/app/data
-      - ./faiss_index:/app/faiss_index
-    depends_on:
-      - ollama
-    networks:
-      - rag-network
-
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11434
-    volumes:
-      - ollama-models:/root/.ollama
-    networks:
-      - rag-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-
-volumes:
-  ollama-models:
-
-networks:
-  rag-network:
-    driver: bridge
-```
-
-### Step 2: Start Services
+Start the services:
 
 ```bash
 docker-compose up -d
 
-# Wait for services to start (30s)
-sleep 30
+# Wait for services to start
+sleep 10
 
-# Pull model in Ollama
+# Pull the llama3 model
 docker-compose exec ollama ollama pull llama3
-
-# Test API
-curl http://localhost:8000/health
-
-# Access Swagger UI
-# Open http://localhost:8000/docs in your browser
 ```
 
-### Step 3: Monitor
+### 2. Access the Application
 
-```bash
-# View logs
-docker-compose logs -f rag-api
+- **API**: http://localhost:8000
+- **Swagger UI**: http://localhost:8000/docs
+- **Health Check**: `curl http://localhost:8000/health`
 
-# Check status
-docker-compose ps
-```
 
-### Step 4: Stop Services
+### 4. Stop Services
 
 ```bash
 docker-compose down
 ```
-
----
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create `.env` file with:
-
-```env
-# FastAPI
-FASTAPI_HOST=0.0.0.0          # API bind address
-FASTAPI_PORT=8000             # API port
-
-# LLM Configuration
-LLM_MODEL=llama3          # Model name
-OLLAMA_BASE_URL=http://localhost:11434
-
-# Data paths
-DATA_DIR=data                  # Documents directory
-VECTOR_STORE_PATH=faiss_index
-
-# Vector store parameters
-CHUNK_SIZE=500                 # Tokens per chunk
-CHUNK_OVERLAP=50               # Token overlap between chunks
-```
-
----
-
-## ✅ Post-Deployment Verification
-
-### 1. Health Check
-
-```bash
-curl -s http://localhost:8000/health | python -m json.tool
-```
-
-Expected response:
-```json
-{
-  "status": "ok",
-  "message": "RAG API is running",
-  "model": "llama3"
-}
-```
-
-### 2. Functional Test
-
-```bash
-curl -s -X POST http://localhost:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question": "Quelle est la politique de retour ?"}' | python -m json.tool
-```
-
-### 3. Access Swagger UI
-
-Open http://localhost:8000/docs in your browser to interact with the API
-
-### 4. Error Handling Test
-
-```bash
-# Test with invalid request
-curl -X POST http://localhost:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"invalid": "data"}'
-```
-
----
-
-## 📊 Monitoring & Logs
-
-### Local Deployment
-
-```bash
-# Follow logs
-tail -f rag-api.log
-
-# Check Ollama connectivity
-curl http://localhost:11434/api/tags
-```
-
-### Docker Deployment
-
-```bash
-# View container logs
-docker logs -f rag-api
-
-# Check resource usage
-docker stats rag-api
-
-# Inspect container
-docker inspect rag-api
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Issue: "No such file or directory: data/..."
-
-**Solution:**
-```bash
-# Ensure data directory exists
-mkdir -p data
-
-# Copy resources
-cp resources/*.json data/
-```
-
-### Issue: "Ollama connection refused"
-
-**Solution:**
-```bash
-# Check Ollama is running
-ollama serve
-
-# Or in Docker, verify network communication
-docker-compose ps
-docker-compose logs ollama
-```
-
-### Issue: "FAISS index corrupted"
-
-**Solution:**
-```bash
-# Rebuild FAISS index
-rm -rf faiss_index/
-python src/app.py
-# API will auto-rebuild on first run
-```
-
-### Issue: "Out of memory"
-
-**Solution:**
-- Reduce chunk size: `CHUNK_SIZE=250`
-- Reduce retrieval count: modify `k=3` in llm_rag.py
-- Deploy on machine with more RAM
-
-### Issue: "Slow responses"
-
-**Solutions:**
-- Use a faster model: try `mistral` instead of `llama3`
-- Cache FAISS locally on faster disk
-- Deploy Ollama on GPU machine
-
----
-
-## 📈 Scaling
-
-### Horizontal Scaling
-
-For multiple API instances:
-
-```yaml
-# docker-compose.yml
-services:
-  rag-api-1:
-    build: .
-    ports:
-      - "5000:5000"
-  rag-api-2:
-    build: .
-    ports:
-      - "5001:5000"
-  # ... share same FAISS index and Ollama
-  
-  ollama:
-    # shared instance
-```
-
-### Performance Tuning
-
-1. **FAISS Index**
-   - Use `IndexIVFFlat` for 1M+ documents
-   - Use `faiss.gpu_resources.StandardGpuResources()` for GPU
-
-2. **Ollama**
-   - Enable GPU: `CUDA_VISIBLE_DEVICES=0 ollama serve`
-   - Increase `num_thread`: `ollama serve --num-thread 8`
-
-3. **FastAPI**
-   - Use production ASGI server with multiple workers:
-     ```bash
-     pip install uvicorn
-     uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4
-     ```
-   - Or use Gunicorn with Uvicorn workers:
-     ```bash
-     pip install gunicorn
-     gunicorn -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000 app:app
-     ```
-
----
-
-## 📝 Maintenance
-
-### Regular Tasks
-
-**Daily:**
-- Monitor API health: `curl /health`
-- Check logs for errors
-
-**Weekly:**
-- Test with sample questions
-- Monitor FAISS index size
-
-**Monthly:**
-- Add new documents: `cp new_docs.json data/`
-- Rebuild FAISS index if needed
-- Update Granite model: `ollama pull llama3`
-
----
-
-## 🔐 Security Considerations
-
-### Before Production
-
-- [ ] Use production ASGI server (not `uvicorn --reload`)
-- [ ] Add authentication: API key validation with FastAPI dependencies
-- [ ] Use HTTPS: reverse proxy with nginx/Apache
-- [ ] Rate limiting: implement with `slowapi` or middleware
-- [ ] Input validation: already done with Pydantic models
-- [ ] Sanitize log output: remove sensitive data
-- [ ] Enable security headers via middleware
-
-### Example: Rate Limiting
-
-```python
-from slowapi import Limiter
-from slowapi.util import get_remote_address
-
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]
-)
-
-app.state.limiter = limiter
-app.add_middleware(SlowAPIMiddleware)
-
-@app.post('/ask')
-@limiter.limit("5 per minute")
-async def ask(request: QuestionRequest):
-    # ... existing code
-```
-
----
-
-## 📞 Support
-
-For issues:
-1. Check logs: `docker logs rag-api` or local terminal
-2. Verify Ollama: `curl http://localhost:11434/api/tags`
-3. Test connectivity: `curl -X POST http://localhost:5000/ask`
-4. Review [reflection.md](../reflection.md) for design decisions
-
----
-
-**Last Updated**: 2026-03-29

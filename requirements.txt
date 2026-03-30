@@ -1,3 +1,4 @@
+numpy<2.0
 langchain==0.3.24
 langchain-community==0.3.23
 langchain-core==0.3.56
