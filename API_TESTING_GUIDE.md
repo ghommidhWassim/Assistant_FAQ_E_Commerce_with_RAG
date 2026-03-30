@@ -208,7 +208,7 @@ http://localhost:8000/docs
 
 ## 🧪 Testing Scenarios
 
-### Scenario 1: Healthy System
+### Scenario : Healthy System
 ```bash
 # Check health
 curl http://localhost:8000/health
@@ -219,43 +219,6 @@ curl -X POST http://localhost:8000/ask \
 
 # Expected: 200 OK with answer
 ```
-
-### Scenario 2: Out-of-Context Question
-```bash
-# Ask about something NOT in documents
-curl -X POST http://localhost:8000/ask \
-  -d '{"question": "How to cook pasta?"}'
-
-# Expected: 404 with "not covered by documents" message
-```
-
-### Scenario 3: Invalid Input
-```bash
-# Send empty question
-curl -X POST http://localhost:8000/ask \
-  -d '{"question": ""}'
-
-# Expected: 422 validation error
-
-# Send question too long (> 1000 chars)
-curl -X POST http://localhost:8000/ask \
-  -d '{"question": "'$(python3 -c "print('a'*1001)')'\"}'
-
-# Expected: 422 validation error
-```
-
----
-
-## 📊 HTTP Status Codes
-
-| Code | Meaning | Example |
-|------|---------|---------|
-| 200 | OK | Answer found and returned |
-| 400 | Bad Request | Invalid JSON format |
-| 404 | Not Found | Question out of context |
-| 422 | Validation Error | Missing required fields |
-| 500 | Server Error | RAG handler crash |
-
 ---
 
 ## 🔧 Testing Script
@@ -264,10 +227,10 @@ Run the provided test script:
 
 ```bash
 # Make it executable
-chmod +x /home/gass/Desktop/test/rag_chatbot/test_api.sh
+chmod +x test_api.sh
 
 # Run tests (wait for app to initialize first!)
-/home/gass/Desktop/test/rag_chatbot/test_api.sh
+./test_api.sh
 ```
 
 This script:
@@ -290,12 +253,11 @@ curl http://localhost:8000/health
 # 2. Ask a question
 curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "What is your return policy?"}'
+  -d '{"question": "c est quoi la politique de retour?"}'
 
 # 3. Open Swagger UI in browser
-open http://localhost:8000/docs  # macOS
-xdg-open http://localhost:8000/docs  # Linux
-start http://localhost:8000/docs  # Windows
+open http://localhost:8000/docs  
+
 ```
 
 ---
@@ -307,8 +269,6 @@ start http://localhost:8000/docs  # Windows
 | GET | `/health` | Health check | Nothing |
 | POST | `/ask` | Ask question | `{"question": "..."}`  |
 | GET | `/docs` | Swagger UI | Nothing |
-| GET | `/redoc` | ReDoc docs | Nothing |
-| GET | `/openapi.json` | OpenAPI schema | Nothing |
 
 ---
 
@@ -316,7 +276,7 @@ start http://localhost:8000/docs  # Windows
 
 ### Issue: Connection Refused
 **Cause:** App still initializing  
-**Solution:** Wait 45+ seconds and retry
+**Solution:** Wait 45+ seconds 
 
 ### Issue: 404 Not Found
 **Cause:** Question not in document database  
@@ -344,7 +304,7 @@ $ curl -X POST http://localhost:8000/ask \
 **Response:**
 ```json
 {
-  "answer": "La politique de retour est de 30 jours pour nos produits...",
+  "answer": "La politique de retour pour nos produits...",
   "sources": ["FAQ.json"],
   "confidence": "high",
   "coverage": "complete"
@@ -370,4 +330,4 @@ $ curl -X POST http://localhost:8000/ask \
 
 ---
 
-**Ready to test? Start with the health endpoint first!** ✅
+**Ready to test? Start with the health endpoint first!** 

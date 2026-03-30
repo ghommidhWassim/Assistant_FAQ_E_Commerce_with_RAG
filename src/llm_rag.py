@@ -1,12 +1,12 @@
 from pathlib import Path
 from langchain_ollama.chat_models import ChatOllama
-from langchain_core.prompts import PromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain.schema import HumanMessage, AIMessage, SystemMessage, BaseMessage
 from typing import List, Dict, Tuple
 from langchain.schema import Document
 from vector_store import VectorStore
 from langchain_core.output_parsers import StrOutputParser
-import json
+
 
 class LLMRAGHandler:
     """
@@ -23,7 +23,7 @@ class LLMRAGHandler:
         vector_store (VectorStore): The vector store used for document retrieval.
         system_prompt (str): The system prompt with careful instructions.
         history (List[BaseMessage]): The conversation history.
-        rag_prompt (PromptTemplate): The prompt template for q&a with RAG.
+        rag_prompt (ChatPromptTemplate): The prompt template for q&a with RAG.
     
     Methods:
         __init__(self, model="llama3"): Initializes the LLMRAGHandler.
@@ -61,22 +61,25 @@ TECHNIQUE DE RAISONNEMENT EXPLICITE:
 - Énonce brièvement ce que tu cherches dans les documents (1 ligne max)
 - Fournir la réponse avec sources
 
-FORMAT DE RÉPONSE ATTENDU:
+FORMAT DE RÉPONSE ATTENDU (respecte exactement ce format):
 Réponse: [ta réponse ici]
 Source(s): [docname.extension, section/ligne ou description précise]
 Couverture: [complete/partial/not available]"""
         
-        # keep track of the conversation history
+        # Keep track of the conversation history
         self.history = []
         self.history.append(SystemMessage(content=self.system_prompt))
 
-        # Enhanced prompt template with explicit reasoning
-        self.rag_prompt = PromptTemplate.from_template(
-            "Question utilisateur: {input}\n"
-            "Contexte pertinent des documents:\n{context}\n"
-            "Utilise le raisonnement en chaîne (chain-of-thought) et cite TOUJOURS tes sources.\n"
-            "Réponse:"
-        )
+        # ChatPromptTemplate injects the system prompt on every chain call
+        # This ensures the French instruction and guardrails are always enforced
+        self.rag_prompt = ChatPromptTemplate.from_messages([
+            ("system", self.system_prompt),
+            ("human",
+             "Question utilisateur: {input}\n"
+             "Contexte pertinent des documents:\n{context}\n"
+             "Utilise le raisonnement en chaîne (chain-of-thought) et cite TOUJOURS tes sources.\n"
+             "Réponse:")
+        ])
 
         # Chain for querying the LLM and getting the answer
         self.llm_chain = self.rag_prompt | self.llm | StrOutputParser()
@@ -167,28 +170,40 @@ Couverture: [complete/partial/not available]"""
     def _parse_response(self, response: str, retrieved_docs: List[Document]) -> Tuple[str, List[str], str]:
         """
         Parses LLM response to extract answer and determine coverage.
-        
+
+        Reads the structured 'Couverture:' line the LLM is instructed to write,
+        with a keyword fallback for refusal phrases.
+
         Returns:
             Tuple of (answer, sources_list, coverage_level)
         """
-        lines = response.strip().split('\n')
-        answer = response  # Default to full response
+        # Extract sources from retrieved documents
         sources = []
-        coverage = 'partial'
-        
-        # Extract sources from documents
         for doc in retrieved_docs:
             source = doc.metadata.get('source', 'Unknown')
             if source not in sources:
                 sources.append(source)
-        
-        # Determine coverage based on keywords in response
-        if any(keyword in response.lower() for keyword in ['complètement', 'entièrement', 'totalement']):
+
+        # Parse the "Couverture:" line written by the LLM
+        coverage = 'partial'
+        lower = response.lower()
+
+        if 'couverture: complete' in lower or 'couverture: complète' in lower:
             coverage = 'complete'
-        elif 'non disponible' in response.lower() or 'pas trouvé' in response.lower():
+        elif 'couverture: not available' in lower or 'couverture: non disponible' in lower:
             coverage = 'not_available'
-        
-        return answer, sources, coverage
+        elif 'couverture: partial' in lower or 'couverture: partielle' in lower:
+            coverage = 'partial'
+        # Fallback: detect refusal keywords in the answer body
+        elif any(k in lower for k in [
+            "je ne trouve pas", "pas d'information", "non disponible",
+            "hors sujet", "ne concerne pas", "n'est pas couverte",
+            "je ne peux pas répondre", "en dehors du contexte",
+            "pas dans les documents", "aucune information"
+        ]):
+            coverage = 'not_available'
+
+        return response, sources, coverage
 
     def _calculate_confidence(self, coverage: str, docs: List[Document]) -> str:
         """
@@ -245,7 +260,6 @@ Couverture: [complete/partial/not available]"""
             print(f"[ERROR] in retrieve: {str(e)}")
             return []
 
-    
     def add_pdf_to_context(self, filePath: Path) -> List[Document]:
         """
         Adds a PDF file to the context for retrieval.

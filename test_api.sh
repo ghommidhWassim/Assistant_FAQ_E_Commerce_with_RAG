@@ -25,14 +25,19 @@ echo "Command: curl -X POST http://localhost:8000/ask with question"
 echo "Response:"
 curl -s -X POST "$API_BASE/ask" \
   -H "Content-Type: application/json" \
-  -d '{"question": "What is the return policy?"}' | python3 -m json.tool
+  -d '{"question": "Quelle est la politique de retour ?"}' | python3 -m json.tool
+echo ""
+
+curl -s -X POST "$API_BASE/ask" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "combien est le coût de livraison ?"}' | python3 -m json.tool
 echo ""
 
 echo "3️⃣ Testing Invalid Request (missing question)"
 echo "─────────────────────────────────────────────"
 curl -s -X POST "$API_BASE/ask" \
   -H "Content-Type: application/json" \
-  -d '{ "question": "How to cook pasta?" }' | python3 -m json.tool
+  -d '{ "question": "Comment préparer des pâtes italiennes?" }' | python3 -m json.tool
 echo ""
 
 echo "4️⃣ Accessing Swagger UI"
@@ -45,7 +50,5 @@ echo "📚 Available Endpoints:"
 echo "  • GET  /health      - Health check"
 echo "  • POST /ask         - Ask a question"
 echo "  • GET  /docs        - Swagger UI"
-echo "  • GET  /redoc       - ReDoc documentation"
-echo "  • GET  /openapi.json - OpenAPI schema"
 echo ""
 echo "✅ All tests completed!"

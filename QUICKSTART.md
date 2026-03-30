@@ -5,17 +5,16 @@ Get the RAG chatbot running in **3 minutes**.
 ## Prerequisites
 
 ✅ Ollama running: `ollama serve` (in terminal 1)
-✅ Model pulled: `ollama pull granite3.3`
+✅ Model pulled: `ollama pull llama3`
 ✅ Python 3.9+
 
 ## Start API (Terminal 2)
 
 ```bash
-cd rag_chatbot
+cd Assistant_FAQ_E_Commerce_with_RAG
 
 # Setup once
-pip install -q -r requirements.txt
-cd src
+pip install -r requirements.txt
 
 # Run
 python app.py
@@ -52,7 +51,7 @@ curl http://localhost:8000/health
 ```bash
 curl -X POST http://localhost:8000/ask \
   -H "Content-Type: application/json" \
-  -d '{"question": "What is the return policy?"}'
+  -d '{"question": "posez votre question"}'
 ```
 
 ## Sample Response
@@ -75,4 +74,3 @@ curl -X POST http://localhost:8000/ask \
 
 ---
 
-**Done! You have a working RAG chatbot with Swagger UI.** 🎉

@@ -18,12 +18,12 @@ A RAG (Retrieval-Augmented Generation) chatbot for accurate, source-backed e-com
     │  FastAPI (app.py)         │
     │  - Input validation       │
     │  - Swagger UI docs        │
-    │  - Pydantic responses     │
+    │                           │
     └────────────┬──────────────┘
                  │
     ┌────────────▼─────────────────────┐
     │  RAG Handler (llm_rag.py)        │
-    │  1. Semantic search (FAISS)      │
+    │  1. Semantic search              │
     │  2. Prompt engineering           │
     │  3. LLM inference (llama3)       │
     │  4. Post-processing              │
@@ -187,56 +187,3 @@ rag_chatbot/
 ├── README.md                   # This file
 └── LICENSE                     # MIT
 ```
-
-## 📊 Example Flow
-
-**Input:** "Do I get a warranty on electronics?"
-
-**Step 1 - Retrieval:**
-- Embed question via Ollama
-- ChromaDB search returns top 5 chunks
-- Found: FAQ.json, conditions.json
-
-**Step 2 - Prompt:**
-```
-System: [French instructions + source guidelines]
-Context: [Retrieved chunks with metadata]
-Question: [User question]
-```
-
-**Step 3 - Generation:**
-- llama3 generates answer in French
-- Includes sources and reasoning
-
-**Step 4 - Post-Processing:**
-- Extract sources
-- Assess coverage (complete/partial/none)
-- Confidence score
-
-**Output:**
-```json
-{
-  "answer": "Yes, electronics have 2-year warranty...",
-  "sources": ["FAQ.json", "conditions.json"],
-  "confidence": "high",
-  "coverage": "complete"
-}
-```
-
-## 🧪 Testing
-
-**See** [eval/README.md](eval/README.md) **for evaluation tools.**
-
-Run quality checks on RAG outputs using RAGAS metrics:
-```bash
-python eval/evaluation.py --create-sample
-python eval/evaluation.py
-```
-
-## 📄 License
-
-MIT License. See LICENSE for details.
-
----
-
-**Stack:** FastAPI • Ollama (llama3) • FAISS • LangChain • Docker

@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Quelle est la politique de retour ?",
+    "expected_answer": "Les retours sont acceptés under certain conditions"
+  },
+  {
+    "question": "Quel est le délai de livraison standard ?",
+    "expected_answer": "Standard delivery takes 5-7 business days"
+  },
+  {
+    "question": "Comment puis-je suivre ma commande ?",
+    "expected_answer": "You can track your order using the order number"
+  },
+  {
+    "question": "Disposez-vous d'une garantie ?",
+    "expected_answer": "Yes, products come with a warranty"
+  },
+  {
+    "question": "Quelles sont les frais de livraison ?",
+    "expected_answer": "Shipping costs depend on location"
+  },
+  {
+    "question": "Puis-je modifier ma commande après l'avoir passée ?",
+    "expected_answer": "Order modifications may be possible depending on status"
+  },
+  {
+    "question": "Acceptez-vous les retours internationaux ?",
+    "expected_answer": "International returns are subject to specific conditions"
+  },
+  {
+    "question": "Y a-t-il une politique d'échange de produits ?",
+    "expected_answer": "Product exchanges are available within the return period"
+  },
+  {
+    "question": "Comment contactez-vous le service client ?",
+    "expected_answer": "Customer support is available through email and chat"
+  },
+  {
+    "question": "Offrez-vous une livraison gratuite ?",
+    "expected_answer": "Free shipping is available for orders above a minimum amount"
+  }
+]
